@@ -35,9 +35,7 @@ trap bailout QUIT INT EXIT
 COMMON_PORT=0
 STATUS_PORT=0
 
-while [ $COMMON_PORT -lt 1024  -o  $STATUS_PORT -lt 1024 ] ; do
+while [ $COMMON_PORT -lt 1024 ] || [  $STATUS_PORT -lt 1024 ] ; do
     COMMON_PORT=$RANDOM
     STATUS_PORT=$RANDOM
-
-
 done
