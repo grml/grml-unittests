@@ -14,11 +14,13 @@ if [ -n "$TESTS_SRC" ] ; then
 fi
 chmod +x /tmp/tests/*.sh
 
+TESTS=""
 for file in /tmp/tests/*.sh ; do
-    PATH=/tmp/tests $file
+    PATH=/tmp/tests $file > /tmp/output.log
     RETVAL=$?
-    [ "$RETVAL" -ne 0 ] && wget $STATUS/FAIL
+    [ "$RETVAL" -ne 0 ] && wget --post-file=/tmp/output.log $STATUS/FAIL
+    TESTS="$TESTS $file"
 
 done
-wget $STATUS/DONE
+wget --post-data="Run $TESTS" $STATUS/DONE
 

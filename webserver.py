@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 import sys
+import select
 from os import curdir, sep
 from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
 from optparse import OptionParser
@@ -15,35 +16,59 @@ parser.add_option("-t", "--test", dest="test_name",
 
 # ugly ;0
 options = None
-error = 0
+return_value = 0
 keep_running = True
 message = None
 
 class MyHandler(BaseHTTPRequestHandler):
-    def do_GET(self):
+
+    def stop(self, msg, retval):
         global keep_running
         global message
         global error
+        keep_running=False
+        message=msg
+        return_value=retval
+        return
+
+
+    def do_POST(self):
+        data = ""
+        length = self.headers.getheader('content-length')
+        try:
+            nbytes = int(length)
+        except (TypeError, ValueError):
+            nbytes = 0
+        if nbytes > 0:
+            data = self.rfile.read(nbytes)
+        while select.select([self.rfile._sock], [], [], 0)[0]:
+            if not self.rfile._sock.recv(1):
+                break
+
         if self.path.endswith("FAIL"):
-            self.send_error(404, 'Failed')
-            keep_running = False
-            error = 1
-            message = "FAILED"
+            self.stop("FAILED - %s" % data, 1)
             return
 
         if self.path.endswith("DONE"):
-            self.send_error(404, 'done')
-            error = 0
-            keep_running = False
-            message = "OK"
+            self.stop("OK - %s" % data, 0)
+            return
+
+
+    def do_GET(self):
+        if self.path.endswith("FAIL"):
+            self.stop("FAILED", 1)
+            return
+
+        if self.path.endswith("DONE"):
+            self.stop("OK", 0)
             return
         try:
-                f = open(curdir + sep + self.path)
-                self.send_response(200)
-                self.end_headers()
-                self.wfile.write(f.read())
-                f.close()
-                return
+            f = open(curdir + sep + self.path)
+            self.send_response(200)
+            self.end_headers()
+            self.wfile.write(f.read())
+            f.close()
+            return
         except IOError:
             self.send_error(404,'File Not Found: %s' % self.path)
     def log_message(self, *args):
@@ -64,7 +89,7 @@ def main():
         while keep_running:
             server.handle_request()
         sys.stderr.write("%s: %s\n" % (options.test_name, message))
-        sys.exit(error)
+        sys.exit(return_value)
     except KeyboardInterrupt:
         server.socket.close()
 

@@ -5,7 +5,7 @@ export URL_PREFIX=http://10.0.2.2
 BAILOUT_CMD=""
 
 timeout_handler() {
-    wget -q -O /dev/null http://localhost:$STATUS_PORT//FAIL
+    wget -q --post-data="Timeout" -O /dev/null http://localhost:$STATUS_PORT//FAIL
     bailout
 }
 
