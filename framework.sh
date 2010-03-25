@@ -16,7 +16,7 @@ bailout() {
 
 run_test()
 {
-    gatling -n -p $COMMON_PORT >/dev/null 2>&1 &
+    python -m SimpleHTTPServer $COMMON_PORT >/dev/null 2>&1 &
     GATLING_PID=$!
     kvm -kernel "$KERNEL" -initrd "$INITRD" -append "$CMDLINE"  -vnc :0 -cdrom "$CDROM" -boot d $KVM_PARAMS &
     KVM_PID=$!
