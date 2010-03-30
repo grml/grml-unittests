@@ -1,5 +1,5 @@
 #!/bin/zsh
-if [ $# -le 2 ] ; then
+if [ $# -lt 2 ] ; then
     echo "Usage: $0 cdrom mountpoint [tests]"
     exit 1
 fi
