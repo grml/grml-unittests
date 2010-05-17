@@ -12,7 +12,10 @@ if [ -n "$TESTS_SRC" ] ; then
     wget -m -np -nd $TESTS_SRC/
     cd -
 fi
-chmod +x /tmp/tests/*.sh
+
+if [ -d /tmp/tests ] ; then
+    chmod +x /tmp/tests/*.sh
+fi
 
 TESTS=""
 for file in /tmp/tests/*.sh ; do
