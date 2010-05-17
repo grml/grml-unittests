@@ -1,0 +1,19 @@
+Source: grml-unittests
+Section: misc
+Priority: optional
+Maintainer: Michael Prokop <mika@grml.org>
+Build-Depends: debhelper (>= 5)
+Build-Depends-Indep: asciidoc, docbook-xsl, xsltproc
+Standards-Version: 3.8.4
+Homepage: http://grml.org/unittests/
+Vcs-Browser: http://git.grml.org/?p=grml-unittests.git
+Vcs-Git: git://git.grml.org/grml-unittests.git
+
+Package: grml-unittests
+Architecture: all
+Depends: ${misc:Depends}, kvm, python, zsh
+Recommends: xvnc4viewer | vnc-viewer
+Description: Debian Live initramfs hook
+ grml-unittests is a framework providing unit tests
+ for testing Grml features as well as any other software
+ that is running on top of Grml.

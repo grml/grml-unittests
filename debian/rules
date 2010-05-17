@@ -1,0 +1,59 @@
+#!/usr/bin/make -f
+
+# Uncomment this to turn on verbose mode.
+#export DH_VERBOSE=1
+
+build: build-stamp
+build-stamp:
+	dh_testdir
+
+	# Building package
+	#$(MAKE) -C manpages
+
+	touch build-stamp
+
+clean:
+	dh_testdir
+	dh_testroot
+	rm -f build-stamp
+
+	# Cleaning package
+	#$(MAKE) -C manpages clean
+
+	dh_clean
+
+install: build
+	dh_testdir
+	dh_testroot
+	dh_clean -k
+	dh_installdirs usr/share/grml-unittests
+
+	# Installing package
+	#$(MAKE) install DESTDIR=$(CURDIR)/debian/live-initramfs
+	cp -a autoconfig debian/grml-unittests/usr/share/grml-unittests/
+	cp -a framework.sh debian/grml-unittests/usr/share/grml-unittests/
+	cp -a grml2hd debian/grml-unittests/usr/share/grml-unittests/
+	cp -a grml2usb debian/grml-unittests/usr/share/grml-unittests/
+	cp -a grml-debootstrap debian/grml-unittests/usr/share/grml-unittests/
+	cp -a lvm debian/grml-unittests/usr/share/grml-unittests/
+	cp -a run_tests.sh debian/grml-unittests/usr/share/grml-unittests/
+	cp -a TODO debian/grml-unittests/usr/share/grml-unittests/
+	cp -a webserver.py debian/grml-unittests/usr/share/grml-unittests/
+
+binary-arch: build install
+
+binary-indep: build install
+	dh_testdir
+	dh_testroot
+	dh_installchangelogs
+	dh_installdocs
+	dh_install
+	dh_compress
+	dh_fixperms
+	dh_installdeb
+	dh_gencontrol
+	dh_md5sums
+	dh_builddeb
+
+binary: binary-indep binary-arch
+.PHONY: build clean binary-indep binary-arch binary install
