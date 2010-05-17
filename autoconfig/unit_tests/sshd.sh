@@ -9,6 +9,9 @@ oneTimeSetUp() {
     . /etc/grml/autoconfig.functions
     PATH=$OLDPATH
     config_ssh
+    # as /etc/init.d/ssh is started in background
+    # at least try to give it some more time
+    sleep 5
 }
 
 oneTimeTearDown() {
