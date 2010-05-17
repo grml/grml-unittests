@@ -11,6 +11,7 @@ timeout_handler() {
 }
 
 bailout() {
+    [ -n "$DEBUG" ] && return 0
     eval $BAILOUT_CMD
     kill -9 $GATLING_PID $KVM_PID $SERVER_PID $TIMEOUT_PID $$ 2>/dev/null
 }
@@ -37,6 +38,7 @@ run_test()
 
 timeout()
 {
+    [ -n "$DEBUG" ] && return 0
     ( sleep $TIMEOUT_TIME ; kill -16 $$; )2>/dev/null &
     TIMEOUT_PID=$!
 }
