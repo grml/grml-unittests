@@ -2,6 +2,8 @@
 
 . $FRAMEWORK
 
+setopt shwordsplit
+
 CMDLINE="$CMDLINE_COMMON noprompt netscript=$URL_PREFIX:$COMMON_PORT/deploy.sh status=$URL_PREFIX:$STATUS_PORT/"
 IMAGE=$(tempfile -d /dev/shm)
 KVM_PARAMS="-hda $IMAGE"
@@ -21,8 +23,4 @@ wait $KVM_PID
 kvm -vnc :0 -hda $IMAGE  &
 TEST_PID=$!
 
-
 wait $SERVER_PID
-kill -9 $TEST_PID
-rm -f $IMAGE
-
