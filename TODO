@@ -1,1 +1,6 @@
-* screenshots
+TODOs / Wishlist for grml-unittests
+-----------------------------------
+
+* provide feature to automatically capture screenshots of test execution
+* provide documentation/manpages
+* improve $DEBUG feature (kill all running processes on request)
