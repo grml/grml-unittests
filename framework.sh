@@ -35,6 +35,12 @@ trap bailout QUIT INT EXIT
 COMMON_PORT=0
 STATUS_PORT=0
 
+# $RANDOM is not set in dash
+if [ -z "$RANDOM" ] ; then
+    echo "Variable \$RANDOM not set, can not choose random port. Exiting.">&2
+    bailout
+fi
+
 while [ $COMMON_PORT -lt 1024 ] || [  $STATUS_PORT -lt 1024 ] ; do
     COMMON_PORT=$RANDOM
     STATUS_PORT=$RANDOM
