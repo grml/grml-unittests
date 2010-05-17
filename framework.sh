@@ -1,8 +1,9 @@
-#!/bin/sh
+#!/bin/zsh
 
 TIMEOUT_TIME=60
 export URL_PREFIX=http://10.0.2.2
 BAILOUT_CMD=""
+
 
 timeout_handler() {
     wget -q --post-data="Timeout" -O /dev/null http://localhost:$STATUS_PORT//FAIL
@@ -22,7 +23,18 @@ run_test()
     KVM_PID=$!
     $SERVER_STATUS -p $STATUS_PORT -t "$TEST_NAME" &
     SERVER_PID=$!
+    if [ -n "$VNC" -a -n "$VNCVIEWER" ] ; then
+        while $VNCSTATUS; do
+	  VNCSTATUS=true
+	  sleep 1
+          if lsof -i -n | grep ':5900' ; then
+	    $VNCVIEWER localhost &
+	    VNCSTATUS=false
+          fi
+        done
+    fi
 }
+
 timeout()
 {
     ( sleep $TIMEOUT_TIME ; kill -16 $$; )2>/dev/null &
@@ -35,7 +47,9 @@ trap bailout QUIT INT EXIT
 COMMON_PORT=0
 STATUS_PORT=0
 
-# $RANDOM is not set in dash
+# $RANDOM is not set in dash, make sure a user who doesn't use
+# something like /bin/zsh in his test scripts doesn't get obscure
+# shell error messages
 if [ -z "$RANDOM" ] ; then
     echo "Variable \$RANDOM not set, can not choose random port. Exiting.">&2
     bailout
