@@ -8,12 +8,14 @@ Standards-Version: 3.8.4
 Homepage: http://grml.org/unittests/
 Vcs-Browser: http://git.grml.org/?p=grml-unittests.git
 Vcs-Git: git://git.grml.org/grml-unittests.git
+Origin: Grml
+Bugs: mailto:bugs@grml.org
 
 Package: grml-unittests
 Architecture: all
 Depends: ${misc:Depends}, kvm, python, zsh
 Recommends: xvnc4viewer | vnc-viewer
-Description: Debian Live initramfs hook
+Description: Unit test framework for Grml
  grml-unittests is a framework providing unit tests
  for testing Grml features as well as any other software
  that is running on top of Grml.
