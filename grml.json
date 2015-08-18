@@ -1,0 +1,41 @@
+{
+  "variables": {
+    "grml_type": "grml64-small",
+    "grml_version": "2014.11",
+    "grml_iso_checksum": "d1678b086c4891622369f337f1b853f1",
+    "grml_test": "notest",
+    "grml_cmdline": ""
+  },
+
+  "builders": [
+  {
+    "type": "qemu",
+    "vm_name": "{{ user `grml_type` }}_{{ user `grml_version` }}",
+    "iso_url": "file:///home/evgeni/Downloads/grml64-small_testing_build1349.iso",
+    "iso_checksum": "{{ user `grml_iso_checksum` }}",
+    "iso_checksum_type": "md5",
+    "ssh_wait_timeout": "20m",
+    "ssh_username": "root",
+    "ssh_password": "grml",
+    "output_directory": "{{ user `grml_type` }}_{{ user `grml_test` }}_output",
+    "boot_wait": "5s",
+    "boot_command": [
+      "<tab> ssh=grml {{ user `grml_cmdline` }}<enter>"
+    ],
+    "shutdown_command": "shutdown -h now"
+  }
+  ],
+    "provisioners": [
+    {
+      "type": "file",
+      "source": "grml_{{ user `grml_test` }}.bats",
+      "destination": "/tmp/grml.bats"
+    },
+    {
+      "type": "shell",
+      "scripts": [
+        "grml-bats.sh"
+        ]
+    }
+  ]
+}
