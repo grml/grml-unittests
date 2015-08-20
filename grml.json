@@ -28,7 +28,7 @@
     "provisioners": [
     {
       "type": "file",
-      "source": "grml_{{ user `grml_test` }}.bats",
+      "source": "{{ user `grml_test` }}",
       "destination": "/tmp/grml.bats"
     },
     {
