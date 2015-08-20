@@ -1,6 +1,7 @@
 import unittest
 import glob
 import subprocess
+import shlex
 
 class GenericPackerTestCase(unittest.TestCase):
     def __init__(self, methodName, cmdline=None, batsfile=None):
@@ -17,11 +18,17 @@ def load_tests(loader, tests, pattern):
     bats_files = glob.glob('*.bats')
     test_cases = unittest.TestSuite()
     for f in bats_files:
+        cmdline = None
         with open(f) as bats_file:
-            for line in bats_file:
-                if line.startswith("# cmdline:"):
-                    cmdline = line.replace("# cmdline:", "").strip()
-                    test_cases.addTest(GenericPackerTestCase('runTest', cmdline, f))
+            lexer = shlex.shlex(bats_file, posix=True)
+            for token in lexer:
+                if token == 'cmdline':
+                    next_token = lexer.get_token()
+                    if next_token == '=':
+                        value = lexer.get_token()
+                        cmdline = value
+        if cmdline:
+            test_cases.addTest(GenericPackerTestCase('runTest', cmdline, f))
     return test_cases
 
 if __name__ == '__main__':

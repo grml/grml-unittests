@@ -1,6 +1,6 @@
 #!/usr/bin/env bats
 
-# cmdline: hostname=foobar
+cmdline="hostname=foobar"
 
 # tests
 @test "hostname= passed properly to the kernel" {
