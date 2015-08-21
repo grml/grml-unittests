@@ -1,6 +1,6 @@
 #!/usr/bin/env bats
 
-cmdline="dns=1.1.1.1,2.2.2.2,3.3.3.3"
+grml_cmdline="dns=1.1.1.1,2.2.2.2,3.3.3.3"
 
 # tests
 @test "dns= passed properly to the kernel" {
