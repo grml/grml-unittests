@@ -13,7 +13,7 @@
   "builders": [
   {
     "type": "qemu",
-    "vm_name": "{{ user `grml_type` }}_{{ user `grml_version` }}",
+    "vm_name": "{{ user `grml_type` }}_{{ user `grml_version` }}_{{ user `grml_test` }}",
     "iso_url": "{{ user `grml_iso` }}",
     "iso_checksum": "{{ user `grml_iso_checksum` }}",
     "iso_checksum_type": "{{ user `grml_iso_checksum_type` }}",
