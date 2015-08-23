@@ -6,7 +6,8 @@
     "grml_iso_checksum": "d1678b086c4891622369f337f1b853f1",
     "grml_iso_checksum_type": "md5",
     "grml_test": "notest",
-    "grml_cmdline": ""
+    "grml_cmdline": "",
+    "grml_hda": "/dev/null"
   },
 
   "builders": [
@@ -24,6 +25,7 @@
     "boot_command": [
       "<tab> ssh=grml {{ user `grml_cmdline` }}<enter>"
     ],
+    "qemuargs": [ [ "-hda", "{{ user `grml_hda` }}" ] ],
     "shutdown_command": "shutdown -h now"
   }
   ],
